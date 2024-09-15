@@ -2,7 +2,6 @@ package com.zerowhisper.secondtask.filter;
 
 import com.zerowhisper.secondtask.service.JWTUtility;
 import com.zerowhisper.secondtask.service.UserDetailServiceCustom;
-import com.zerowhisper.secondtask.service.UserAccountService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -21,12 +20,17 @@ import java.io.IOException;
 @JavaBean
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
+    private final JWTUtility jwtUtility;
+    private final UserDetailServiceCustom userDetailServiceCustom;
+
     @Autowired
-    private JWTUtility jwtUtility;
-    @Autowired
-    private UserDetailServiceCustom userDetailServiceCustom;
-    @Autowired
-    private UserAccountService userAccountService;
+    public JwtAuthenticationFilter(
+            JWTUtility jwtUtility,
+            UserDetailServiceCustom userDetailServiceCustom
+    ) {
+        this.jwtUtility = jwtUtility;
+        this.userDetailServiceCustom = userDetailServiceCustom;
+    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
