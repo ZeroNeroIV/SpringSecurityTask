@@ -1,8 +1,8 @@
 package com.zerowhisper.secondtask.filter;
 
-import com.zerowhisper.secondtask.Security.JWTUtility;
-import com.zerowhisper.secondtask.Service.UserDetailServiceCustom;
-import com.zerowhisper.secondtask.Service.UserService;
+import com.zerowhisper.secondtask.service.JWTUtility;
+import com.zerowhisper.secondtask.service.UserDetailServiceCustom;
+import com.zerowhisper.secondtask.service.UserAccountService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -26,7 +26,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Autowired
     private UserDetailServiceCustom userDetailServiceCustom;
     @Autowired
-    private UserService userService;
+    private UserAccountService userAccountService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
@@ -39,14 +39,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             String token = authHeader.substring(7);
             try {
                 // Validate the token
-                if (jwtUtility.isTokenExpired(token)) {
+                if (jwtUtility.isAccessTokenExpired(token)) {
                     // Token is expired, no further processing
                     filterChain.doFilter(request, response);
                     return;
                 }
 
                 // Extract user information from token
-                String username = jwtUtility.extractUsername(token);
+                String username = jwtUtility.extractUsernameFromAccessToken(token);
 
                 if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                     // Load user details from the service

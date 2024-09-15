@@ -1,4 +1,4 @@
-package com.zerowhisper.secondtask.Repository;
+package com.zerowhisper.secondtask.repository;
 
 import com.zerowhisper.secondtask.model.UserAccount;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -1,4 +1,4 @@
-package com.zerowhisper.secondtask.Security;
+package com.zerowhisper.secondtask.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

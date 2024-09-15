@@ -1,4 +1,4 @@
-package com.zerowhisper.secondtask.Service;
+package com.zerowhisper.secondtask.service;
 
 
 import jakarta.mail.MessagingException;

@@ -1,4 +1,4 @@
-package com.zerowhisper.secondtask.Security;
+package com.zerowhisper.secondtask.security;
 
 import com.zerowhisper.secondtask.filter.JwtAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,10 +39,8 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers("/api/v1/auth/**").permitAll() // Allow access to signup
-                        .requestMatchers(
-                                "/api/v1/auth/user/info", "/api/v1/auth/logout").authenticated()
-                        .anyRequest().authenticated())
+                        .requestMatchers("/api/v1/auth/**").permitAll() // Allow access to anything under "/auth"
+                        .anyRequest().authenticated()) // Allow authenticated users only to any other request
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Stateless session management
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class) // Add JWT filter

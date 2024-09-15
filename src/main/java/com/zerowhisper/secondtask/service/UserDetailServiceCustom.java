@@ -1,7 +1,7 @@
-package com.zerowhisper.secondtask.Service;
+package com.zerowhisper.secondtask.service;
 
-import com.zerowhisper.secondtask.Repository.UserAccountRepository;
 import com.zerowhisper.secondtask.model.UserAccount;
+import com.zerowhisper.secondtask.repository.UserAccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;

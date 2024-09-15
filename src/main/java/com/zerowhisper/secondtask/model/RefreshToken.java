@@ -17,11 +17,19 @@ public class RefreshToken {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long tokenId;
 
-
     // Why we need ManyToOne ? because maybe more than one device might access the same account
-    @ManyToOne
-    @JoinColumn(name = "userID", nullable = false)
-    private UserAccount user;
+    /*
+    Understanding Cascade Types in @ManyToOne
+    - CascadeType.ALL: Propagates all operations (save, update, delete) to associated entities. You generally do not want this when deleting one row without affecting related rows.
+    - CascadeType.REMOVE: Deletes the associated entities when the owning entity is deleted. You do not want this if you don’t want to delete associated entities.
+    - CascadeType.PERSIST: Propagates the save operation to associated entities.
+    - CascadeType.MERGE: Propagates the merge (update) operation.
+    - CascadeType.REFRESH: Refreshes the associated entity.
+    - CascadeType.DETACH: Detaches the associated entity.
+     */
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "user_account", nullable = false) // ??????????
+    private UserAccount userAccount;
     @Column(nullable = false, updatable = false)
     private String refreshToken;
     @Column(nullable = false, updatable = false)

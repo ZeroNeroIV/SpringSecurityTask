@@ -1,6 +1,5 @@
 package com.zerowhisper.secondtask.dto;
 
-
 import lombok.Data;
 
 //DTO
@@ -8,6 +7,4 @@ import lombok.Data;
 public class LoginAttributeInputDto {
     private String email;
     private String password;
-
-
 }

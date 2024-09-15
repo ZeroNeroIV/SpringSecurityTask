@@ -1,26 +1,21 @@
-package com.zerowhisper.secondtask.Service;
+package com.zerowhisper.secondtask.service;
 
-import com.zerowhisper.secondtask.Repository.UserAccountRepository;
-import com.zerowhisper.secondtask.Security.JWTUtility;
-import com.zerowhisper.secondtask.dto.RefreshTokenRequestBody;
 import com.zerowhisper.secondtask.dto.UserInfoDto;
 import com.zerowhisper.secondtask.model.UserAccount;
+import com.zerowhisper.secondtask.repository.UserAccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 import java.util.Optional;
 
 @Service
-public class UserService {
+public class UserAccountService {
     private final UserAccountRepository userAccountRepository;
     private final JWTUtility jwtUtility;
 
     @Autowired
-    public UserService(
+    public UserAccountService(
             UserAccountRepository userAccountRepository,
             JWTUtility jwtUtility
     ) {
@@ -49,14 +44,15 @@ public class UserService {
         return user.get();
     }
 
-    public UserInfoDto getUserInfo(RefreshTokenRequestBody token) throws Exception {
-        String jwtToken = token.refreshToken.substring(7);
+    public UserInfoDto getUserInfo(String token) throws Exception {
+        String jwtToken = jwtUtility.getToken(token);
 
-        if (jwtUtility.isTokenExpired(jwtToken))
-            throw new IllegalStateException();
+        if (jwtUtility.isAccessTokenExpired(jwtToken)) {
+            throw new IllegalStateException("Account not enabled.\n" +
+                    "Please verify your account.");
+        }
 
-        String username = jwtUtility.extractUsername(jwtToken);
-
+        String username = jwtUtility.extractUsernameFromAccessToken(jwtToken);
         //Throw email extract from the database the info about the user
 
         UserAccount userAccount = findByUsername(username);
@@ -69,5 +65,13 @@ public class UserService {
                 userAccount.getEmail(),
                 userAccount.getUsername(),
                 userAccount.isEnabled());
+    }
+
+    public List<UserAccount> getAllUsersInfo(String token) {
+        String jwtToken = token.replace("Bearer", "");
+        if (!jwtUtility.extractAuthoritiesFromAccessToken(token).contains("ADMIN")) {
+            throw new RuntimeException("Unauthorized access.");
+        }
+        return userAccountRepository.findAll();
     }
 }
